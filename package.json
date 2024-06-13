@@ -1,0 +1,17 @@
+{
+  "name": "com.anklebreaker-studio.core",
+  "version": "1.0.0",
+  "displayName": "AnkleBreaker-studio Core",
+  "description": "The core scripts of the AnkleBreaker team, without any dependencies.",
+  "unity": "2022.3",
+  "type": "library",
+  "repository": {
+    "url": "https://github.com/AnkleBreaker-Studio/AnkleBreaker-Core",
+    "type": "git"
+  },
+  "author": {
+    "name": "AnkleBreaker-studio",
+    "url": "https://www.anklebreaker-studio.com"
+  },
+  "dependencies": {  }
+}
