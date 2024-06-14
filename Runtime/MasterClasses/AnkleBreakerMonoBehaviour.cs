@@ -1,13 +1,18 @@
 using UnityEngine;
 using AnkleBreaker.Core.MasterInterfaces;
+#if AB_UTILS
 using AnkleBreaker.Inspector;
+#endif
 
 namespace AnkleBreaker.Core.MasterClasses
 {
     public abstract class AnkleBreakerMonoBehaviour : MonoBehaviour, IIsReady
     {
         #region Properties
-        [field: SerializeField,HideInNormalInspector, Tooltip("Set to true once OnStartClient/Server is over")]
+#if AB_UTILS
+        [field: HideInNormalInspector]
+#endif
+        [field: SerializeField, Tooltip("Set to true once OnStartClient/Server is over")]
         public bool IsLocallyReady { get; private set; }
         #endregion
 
