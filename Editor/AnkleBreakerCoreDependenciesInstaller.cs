@@ -22,38 +22,36 @@ namespace AnkleBreaker.Core.Editor
             while (!listProc.IsCompleted)
                 yield return null;
 
-#if !AB_UTILS
-            if (EditorUtility.DisplayDialog("Anklebreaker Installer", "Anklebreaker.Utils appears to be missing and is required for Anklebreaker Core package to work properly. Should we install it now?", "Install", "No"))
+#if AB_UTILS
+            yield return null;
+            AddRequest sysProc = null;
+
+            if (!SessionState.GetBool("AB_UTILS-Install", false))
             {
-                yield return null;
-                AddRequest sysProc = null;
-
-                if (!SessionState.GetBool("AB_UTILS-Install", false))
-                {
-                    SessionState.SetBool("AB_UTILS-Install", true);
-                    sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git");
-                }
-
-                if (sysProc.Status == StatusCode.Failure)
-                    Debug.LogError("PackageManager's System Core install failed, Error Message: " + sysProc.Error.message);
-                else if (sysProc.Status == StatusCode.Success)
-                    Debug.Log("AnkleBreaker.Utils " + sysProc.Result.version + " installation complete");
-                else
-                {
-                    Debug.Log("Installing AnkleBreaker.Utils ...");
-                    while (sysProc.Status == StatusCode.InProgress)
-                    {
-                        yield return null;
-                    }
-                }
-
-                if (sysProc.Status == StatusCode.Failure)
-                    Debug.LogError("PackageManager's AnkleBreaker.Core install failed, Error Message: " + sysProc.Error.message);
-                else if (sysProc.Status == StatusCode.Success)
-                    Debug.Log("AnkleBreaker.Utils " + sysProc.Result.version + " installation complete");
-
-                SessionState.SetBool("AB_UTILS-Install", false);
+                SessionState.SetBool("AB_UTILS-Install", true);
+                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git");
             }
+            else
+            {
+                Debug.Log("AnkleBreaker.Utils checking dependency is already in progress...");
+                yield break;
+            }
+
+            if (sysProc.Status == StatusCode.InProgress)
+            {
+                Debug.Log("Installing AnkleBreaker.Utils ...");
+                while (sysProc.Status == StatusCode.InProgress)
+                {
+                    yield return null;
+                }
+            }
+
+            if (sysProc.Status == StatusCode.Failure)
+                Debug.LogError("PackageManager's AnkleBreaker.Core install failed, Error Message: " + sysProc.Error.message);
+            else if (sysProc.Status == StatusCode.Success)
+                Debug.Log("AnkleBreaker.Utils " + sysProc.Result.version + " installation complete");
+
+            SessionState.SetBool("AB_UTILS-Install", false);
 #endif
         }
 
@@ -78,39 +76,37 @@ namespace AnkleBreaker.Core.Editor
             //Application.OpenURL("https://discord.gg/ANKLEBREAKERASSETSUPPORT");
         }
 
-         private static IEnumerator InstallAnkleBreakerUtils()
+        private static IEnumerator InstallAnkleBreakerUtils()
         {
-            if (EditorUtility.DisplayDialog("Anklebreaker Installer", "Anklebreaker.Utils appears to be missing and is required for Anklebreaker Core package to work properly. Should we install it now?", "Install", "No"))
+            yield return null;
+            AddRequest sysProc = null;
+
+            if (!SessionState.GetBool("AB_UTILS-Install", false))
             {
-                yield return null;
-                AddRequest sysProc = null;
-
-                if (!SessionState.GetBool("AB_UTILS-Install", false))
-                {
-                    SessionState.SetBool("AB_UTILS-Install", true);
-                    sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git");
-                }
-
-                if (sysProc.Status == StatusCode.Failure)
-                    Debug.LogError("PackageManager's System Core install failed, Error Message: " + sysProc.Error.message);
-                else if (sysProc.Status == StatusCode.Success)
-                    Debug.Log("AnkleBreaker.Utils " + sysProc.Result.version + " installation complete");
-                else
-                {
-                    Debug.Log("Installing AnkleBreaker.Utils ...");
-                    while (sysProc.Status == StatusCode.InProgress)
-                    {
-                        yield return null;
-                    }
-                }
-
-                if (sysProc.Status == StatusCode.Failure)
-                    Debug.LogError("PackageManager's AnkleBreaker.Core install failed, Error Message: " + sysProc.Error.message);
-                else if (sysProc.Status == StatusCode.Success)
-                    Debug.Log("AnkleBreaker.Utils " + sysProc.Result.version + " installation complete");
-
-                SessionState.SetBool("AB_UTILS-Install", false);
+                SessionState.SetBool("AB_UTILS-Install", true);
+                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git");
             }
+            else
+            {
+                Debug.Log("AnkleBreaker.Utils checking dependency is already in progress...");
+                yield break;
+            }
+
+            if (sysProc.Status == StatusCode.InProgress)
+            {
+                Debug.Log("Installing AnkleBreaker.Utils ...");
+                while (sysProc.Status == StatusCode.InProgress)
+                {
+                    yield return null;
+                }
+            }
+
+            if (sysProc.Status == StatusCode.Failure)
+                Debug.LogError("PackageManager's AnkleBreaker.Core install failed, Error Message: " + sysProc.Error.message);
+            else if (sysProc.Status == StatusCode.Success)
+                Debug.Log("AnkleBreaker.Utils " + sysProc.Result.version + " installation complete");
+
+            SessionState.SetBool("AB_UTILS-Install", false);
         }
 
         private static List<IEnumerator> coroutines;
