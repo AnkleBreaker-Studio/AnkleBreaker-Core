@@ -13,5 +13,8 @@
     "name": "AnkleBreaker-studio",
     "url": "https://www.anklebreaker-studio.com"
   },
-  "dependencies": {  }
+  "dependencies": 
+  {
+    "com.anklebreaker-studio.utils": "https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git"
+  }
 }
