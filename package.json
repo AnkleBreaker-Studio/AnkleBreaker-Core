@@ -15,6 +15,5 @@
   },
   "dependencies": 
   {
-    "com.anklebreaker-studio.utils": "https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git"
   }
 }
