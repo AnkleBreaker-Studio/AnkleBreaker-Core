@@ -1,0 +1,22 @@
+{
+    "name": "AnkleBreaker.Core.Editor",
+    "rootNamespace": "",
+    "references": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.anklebreaker-studio.utils",
+            "expression": "",
+            "define": "AB_UTILS"
+        }
+    ],
+    "noEngineReferences": false
+}
