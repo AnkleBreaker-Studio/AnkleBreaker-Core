@@ -1,0 +1,58 @@
+﻿using System;
+using UnityEngine;
+
+
+public class #SCRIPTNAME# : AnkleBreakerMonoBehaviour
+{
+    #region PublicAttributes
+    public List<#SCRIPTNAME#Controller> #SCRIPTNAME#ControllerList = new List<#SCRIPTNAME#Controller>();
+    #NOTRIM#
+    #endregion
+    #region PrivateAttributes
+    #NOTRIM#
+    #endregion
+    
+    public override void EventHandlerRegister()
+    {
+        #NOTRIM#
+    }
+    public override void EventHandlerUnRegister()
+    {
+        #NOTRIM#
+    }
+    
+   public override void Start()
+   {
+       base.Start();
+   }
+}
+
+public class #SCRIPTNAME#Controller : RltyNetworkBehaviour
+{
+    #region PublicAttributes
+    #NOTRIM#
+    #endregion
+    #region PrivateAttributes
+    #NOTRIM#
+    #endregion
+    
+    public override void EventHandlerRegister()
+    {
+        #NOTRIM#
+    }
+    public override void EventHandlerUnRegister()
+    {
+        #NOTRIM#
+    }
+    
+    public override void Start()
+    {
+            base.Start();
+    }
+}
+
+public static class #SCRIPTNAME#HandlerData
+{
+    public static UnityAction OnEventRequest;
+    public static void EventRequest() => OnEventRequest?.Invoke();
+}

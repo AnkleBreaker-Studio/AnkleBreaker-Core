@@ -1,0 +1,86 @@
+﻿using System;
+using UnityEngine;
+
+
+public class #SCRIPTNAME# : AnkleBreakerNetworkBehaviour
+{
+    #region PublicAttributes
+    public List<#SCRIPTNAME#Controller> #SCRIPTNAME#ControllerList = new List<#SCRIPTNAME#Controller>();
+    #NOTRIM#
+    #endregion
+    #region PrivateAttributes
+    #NOTRIM#
+    #endregion
+    
+    public override void EventHandlerRegister()
+    {
+        //if (IsOwner)
+        #NOTRIM#
+        //if (IsClient)
+        #NOTRIM#
+        //if (IsServer)
+        #NOTRIM#
+    }
+    public override void EventHandlerUnRegister()
+    {
+        //if (IsOwner)
+        #NOTRIM#
+        //if (IsClient)
+        #NOTRIM#
+        //if (IsServer)
+        #NOTRIM#
+    }
+    
+   public override void OnStartNetwork()
+   {
+          base.OnStartNetwork();
+   }
+}
+
+public class #SCRIPTNAME#Controller : RltyNetworkBehaviour
+{
+    #region PublicAttributes
+    #NOTRIM#
+    #endregion
+    #region PrivateAttributes
+    #NOTRIM#
+    #endregion
+    
+    public override void EventHandlerRegister()
+    {
+        //if (IsOwner)
+        #NOTRIM#
+        //if (IsClient)
+        #NOTRIM#
+        //if (IsServer)
+        #NOTRIM#
+    }
+    public override void EventHandlerUnRegister()
+    {
+        //if (IsOwner)
+        #NOTRIM#
+        //if (IsClient)
+        #NOTRIM#
+        //if (IsServer)
+        #NOTRIM#
+    }
+    
+    public override void OnStartNetwork()
+   {
+          base.OnStartNetwork();
+   }
+}
+
+public static class #SCRIPTNAME#HandlerData
+{
+    #region ServerEvents
+        public static UnityAction OnServerEventRequest;
+        public static void ServerEventRequest() => OnServerEventRequest?.Invoke();
+    #endregion
+    
+    #region ClientEvents
+        public static UnityAction OnClientEventRequest;
+        public static void ClientEventRequest() => OnClientEventRequest?.Invoke();
+    #endregion
+    
+}
