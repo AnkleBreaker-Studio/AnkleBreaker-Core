@@ -22,7 +22,7 @@ namespace AnkleBreaker.Core.Editor
             while (!listProc.IsCompleted)
                 yield return null;
 
-#if AB_UTILS
+#if !AB_UTILS
             yield return null;
             AddRequest sysProc = null;
 
