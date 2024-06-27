@@ -22,14 +22,14 @@ namespace AnkleBreaker.Core.Editor
             while (!listProc.IsCompleted)
                 yield return null;
 
-#if !AB_UTILS
+#if AB_UTILS
             yield return null;
             AddRequest sysProc = null;
 
             if (!SessionState.GetBool("AB_UTILS-Install", false))
             {
                 SessionState.SetBool("AB_UTILS-Install", true);
-                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git");
+                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git#Release");
             }
             else
             {
@@ -47,7 +47,7 @@ namespace AnkleBreaker.Core.Editor
             }
 
             if (sysProc.Status == StatusCode.Failure)
-                Debug.LogError("PackageManager's AnkleBreaker.Core install failed, Error Message: " + sysProc.Error.message);
+                Debug.LogError("PackageManager's AnkleBreaker.Utils install failed, Error Message: " + sysProc.Error.message);
             else if (sysProc.Status == StatusCode.Success)
                 Debug.Log("AnkleBreaker.Utils " + sysProc.Result.version + " installation complete");
 
@@ -84,7 +84,7 @@ namespace AnkleBreaker.Core.Editor
             if (!SessionState.GetBool("AB_UTILS-Install", false))
             {
                 SessionState.SetBool("AB_UTILS-Install", true);
-                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git");
+                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git#Release");
             }
             else
             {
@@ -102,7 +102,7 @@ namespace AnkleBreaker.Core.Editor
             }
 
             if (sysProc.Status == StatusCode.Failure)
-                Debug.LogError("PackageManager's AnkleBreaker.Core install failed, Error Message: " + sysProc.Error.message);
+                Debug.LogError("PackageManager's AnkleBreaker.Utils install failed, Error Message: " + sysProc.Error.message);
             else if (sysProc.Status == StatusCode.Success)
                 Debug.Log("AnkleBreaker.Utils " + sysProc.Result.version + " installation complete");
 
