@@ -1,7 +1,7 @@
 using UnityEngine;
 using AnkleBreaker.Core.MasterInterfaces;
 #if AB_UTILS
-using AnkleBreaker.Inspector;
+using AnkleBreaker.Utils.Inspector;
 #endif
 
 namespace AnkleBreaker.Core.MasterClasses
