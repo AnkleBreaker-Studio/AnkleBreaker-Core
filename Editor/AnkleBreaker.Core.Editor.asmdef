@@ -1,6 +1,6 @@
 {
     "name": "AnkleBreaker.Core.Editor",
-    "rootNamespace": "",
+    "rootNamespace": "AnkleBreaker.Core.Editor",
     "references": [],
     "includePlatforms": [
         "Editor"
