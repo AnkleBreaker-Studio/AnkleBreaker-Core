@@ -12,56 +12,21 @@ namespace AnkleBreaker.Core.Editor
         [InitializeOnLoadMethod]
         public static void CheckAllDependencies()
         {
-            StartCoroutine(CheckAndInstallAllDependenciesCoroutine());
-        }
-
-        private static IEnumerator CheckAndInstallAllDependenciesCoroutine()
-        {
-            var listProc = Client.List();
-
-            while (!listProc.IsCompleted)
-                yield return null;
-
 #if !AB_UTILS_INSPECTOR
-            yield return null;
-            AddRequest sysProc = null;
-
-            if (!SessionState.GetBool("AB_UTILS_INSPECTOR-Install", false))
-            {
-                SessionState.SetBool("AB_UTILS_INSPECTOR-Install", true);
-                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/utils-inspector.git#Release");
-            }
-            else
-            {
-                Debug.Log("AnkleBreaker.Utils.Inspector checking dependency is already in progress...");
-                yield break;
-            }
-
-            if (sysProc.Status == StatusCode.InProgress)
-            {
-                Debug.Log("Installing AnkleBreaker.Utils.Inspector ...");
-                while (sysProc.Status == StatusCode.InProgress)
-                {
-                    yield return null;
-                }
-            }
-
-            if (sysProc.Status == StatusCode.Failure)
-                Debug.LogError("PackageManager's AnkleBreaker.Utils.Inspector install failed, Error Message: " + sysProc.Error.message);
-            else if (sysProc.Status == StatusCode.Success)
-                Debug.Log("AnkleBreaker.Utils.Inspector " + sysProc.Result.version + " installation complete");
-
-            SessionState.SetBool("AB_UTILS_INSPECTOR-Install", false);
+            StartCoroutine(InstallPackageAsync(
+                "https://github.com/AnkleBreaker-Studio/utils-inspector.git#Release",
+                "AB_UTILS_INSPECTOR-Install",
+                "AnkleBreaker.Utils.Inspector"));
 #endif
         }
 
         [MenuItem("Help/AnkleBreaker/Core/Update All Requirements (Package Manager)", priority = 0)]
         public static void InstallRequirements()
         {
-            if (!SessionState.GetBool("AB_UTILS_INSPECTOR-Install", false))
-            {
-                StartCoroutine(InstallAnkleBreakerUtilsInspector());
-            }
+            StartCoroutine(InstallPackageAsync(
+                "https://github.com/AnkleBreaker-Studio/utils-inspector.git#Release",
+                "AB_UTILS_INSPECTOR-Install",
+                "AnkleBreaker.Utils.Inspector"));
         }
 
         [MenuItem("Help/AnkleBreaker/Core/Documentation", priority = 3)]
@@ -76,73 +41,67 @@ namespace AnkleBreaker.Core.Editor
             //Application.OpenURL("https://discord.gg/ANKLEBREAKERASSETSUPPORT");
         }
 
-        private static IEnumerator InstallAnkleBreakerUtilsInspector()
+        private static IEnumerator InstallPackageAsync(string packageUrl, string sessionKey, string displayName)
         {
             yield return null;
-            AddRequest sysProc = null;
 
-            if (!SessionState.GetBool("AB_UTILS_INSPECTOR-Install", false))
+            if (SessionState.GetBool(sessionKey, false))
             {
-                SessionState.SetBool("AB_UTILS_INSPECTOR-Install", true);
-                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/utils-inspector.git#Release");
-            }
-            else
-            {
-                Debug.Log("AnkleBreaker.Utils.Inspector checking dependency is already in progress...");
+                Debug.Log($"{displayName} install is already in progress...");
                 yield break;
             }
 
-            if (sysProc.Status == StatusCode.InProgress)
-            {
-                Debug.Log("Installing AnkleBreaker.Utils.Inspector ...");
-                while (sysProc.Status == StatusCode.InProgress)
-                {
-                    yield return null;
-                }
-            }
+            SessionState.SetBool(sessionKey, true);
+            AddRequest addRequest = Client.Add(packageUrl);
 
-            if (sysProc.Status == StatusCode.Failure)
-                Debug.LogError("PackageManager's AnkleBreaker.Utils.Inspector install failed, Error Message: " + sysProc.Error.message);
-            else if (sysProc.Status == StatusCode.Success)
-                Debug.Log("AnkleBreaker.Utils.Inspector " + sysProc.Result.version + " installation complete");
+            Debug.Log($"Installing {displayName} ...");
+            while (addRequest.Status == StatusCode.InProgress)
+                yield return null;
 
-            SessionState.SetBool("AB_UTILS_INSPECTOR-Install", false);
+            if (addRequest.Status == StatusCode.Failure)
+                Debug.LogError($"PackageManager's {displayName} install failed, Error Message: {addRequest.Error.message}");
+            else if (addRequest.Status == StatusCode.Success)
+                Debug.Log($"{displayName} {addRequest.Result.version} installation complete");
+
+            SessionState.SetBool(sessionKey, false);
         }
 
-        private static List<IEnumerator> coroutines;
+        #region Editor Coroutine System
+        private static List<IEnumerator> _coroutines;
 
         private static void StartCoroutine(IEnumerator handle)
         {
-            if (coroutines == null)
+            if (_coroutines == null)
             {
-                EditorApplication.update -= EditorUpdate;
+                _coroutines = new List<IEnumerator>();
                 EditorApplication.update += EditorUpdate;
-                coroutines = new List<IEnumerator>();
             }
 
-            coroutines.Add(handle);
+            _coroutines.Add(handle);
         }
 
         private static void EditorUpdate()
         {
-            List<IEnumerator> done = new List<IEnumerator>();
-
-            if (coroutines != null)
+            for (int i = _coroutines.Count - 1; i >= 0; i--)
             {
-                foreach (var e in coroutines)
+                try
                 {
-                    if (!e.MoveNext())
-                        done.Add(e);
-                    else
-                    {
-                        if (e.Current != null)
-                            Debug.Log(e.Current.ToString());
-                    }
+                    if (!_coroutines[i].MoveNext())
+                        _coroutines.RemoveAt(i);
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogException(ex);
+                    _coroutines.RemoveAt(i);
                 }
             }
 
-            foreach (var d in done)
-                coroutines.Remove(d);
+            if (_coroutines.Count == 0)
+            {
+                EditorApplication.update -= EditorUpdate;
+                _coroutines = null;
+            }
         }
+        #endregion
     }
 }
