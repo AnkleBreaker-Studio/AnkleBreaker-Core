@@ -13,6 +13,11 @@
     "defineConstraints": [],
     "versionDefines": [
         {
+            "name": "com.anklebreaker-studio.utils",
+            "expression": "",
+            "define": "AB_UTILS_INSPECTOR"
+        },
+        {
             "name": "com.anklebreaker-studio.utils.inspector",
             "expression": "",
             "define": "AB_UTILS_INSPECTOR"
