@@ -8,7 +8,8 @@ using AnkleBreaker.Core.MasterClasses;
 using UnityEngine;
 
 namespace AnkleBreaker.Core.Tests
-{    #region Test Helpers
+{    
+    #region Test Helpers
 
     // Concrete categories for testing
     public class TestCategoryBase : AnkleBreakerCategory { }
