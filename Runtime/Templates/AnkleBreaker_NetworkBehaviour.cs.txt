@@ -1,52 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using AnkleBreaker.Core.MasterClasses;
 
-
-public class #SCRIPTNAME# : AnkleBreakerNetworkBehaviour
+/// <summary>
+/// Network behaviour template. Requires a networking framework (e.g. FishNet).
+/// Replace AnkleBreakerMonoBehaviour with your network behaviour base class.
+/// </summary>
+public class #SCRIPTNAME# : AnkleBreakerMonoBehaviour
 {
-    #region PublicAttributes
-    public List<#SCRIPTNAME#Controller> #SCRIPTNAME#ControllerList = new List<#SCRIPTNAME#Controller>();
+    #region Serialized Fields
     #NOTRIM#
     #endregion
-    #region PrivateAttributes
-    #NOTRIM#
-    #endregion
-    
-    public override void EventHandlerRegister()
-    {
-        //if (IsOwner)
-        #NOTRIM#
-        //if (IsClient)
-        #NOTRIM#
-        //if (IsServer)
-        #NOTRIM#
-    }
-    public override void EventHandlerUnRegister()
-    {
-        //if (IsOwner)
-        #NOTRIM#
-        //if (IsClient)
-        #NOTRIM#
-        //if (IsServer)
-        #NOTRIM#
-    }
-    
-   public override void OnStartNetwork()
-   {
-          base.OnStartNetwork();
-   }
-}
 
-public class #SCRIPTNAME#Controller : RltyNetworkBehaviour
-{
-    #region PublicAttributes
+    #region Private Fields
     #NOTRIM#
     #endregion
-    #region PrivateAttributes
-    #NOTRIM#
-    #endregion
-    
-    public override void EventHandlerRegister()
+
+    protected override void EventHandlerRegister()
     {
         //if (IsOwner)
         #NOTRIM#
@@ -55,7 +27,8 @@ public class #SCRIPTNAME#Controller : RltyNetworkBehaviour
         //if (IsServer)
         #NOTRIM#
     }
-    public override void EventHandlerUnRegister()
+
+    protected override void EventHandlerUnRegister()
     {
         //if (IsOwner)
         #NOTRIM#
@@ -64,23 +37,22 @@ public class #SCRIPTNAME#Controller : RltyNetworkBehaviour
         //if (IsServer)
         #NOTRIM#
     }
-    
-    public override void OnStartNetwork()
-   {
-          base.OnStartNetwork();
-   }
+
+    public override void Start()
+    {
+        base.Start();
+    }
 }
 
 public static class #SCRIPTNAME#HandlerData
 {
     #region ServerEvents
-        public static UnityAction OnServerEventRequest;
-        public static void ServerEventRequest() => OnServerEventRequest?.Invoke();
+    public static event Action OnServerEventRequest;
+    public static void ServerEventRequest() => OnServerEventRequest?.Invoke();
     #endregion
-    
+
     #region ClientEvents
-        public static UnityAction OnClientEventRequest;
-        public static void ClientEventRequest() => OnClientEventRequest?.Invoke();
+    public static event Action OnClientEventRequest;
+    public static void ClientEventRequest() => OnClientEventRequest?.Invoke();
     #endregion
-    
 }

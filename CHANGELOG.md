@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.0.2] - 2026-03-02
+
+### Fixed
+- `ImplementsCategory` always returned `false` when `mustContainsAllCategories` was `true`: added missing `return true` after validation loop
+- Templates referenced non-existent types (`RltyNetworkBehaviour`, `UnityAction`) and missed usings: updated to use Core base classes and `System.Action`
+
+### Changed
+- `AnkleBreakerCategory.CategoryIcon`: converted from public field to property with `[field: SerializeField]` and private set
+- `AssetIdentityStruct` namespace renamed from `AnkleBreaker.Core.MasterStructs` to `AnkleBreaker.Core.Structs` to match folder name
+- Installer: extracted shared `InstallPackageAsync` method, removing duplicated install logic
+- Installer coroutine system: added `try/catch` for exceptions and cleanup of `EditorApplication.update` when queue is empty
+- Added XML summary on `ImplementsType` to clarify inheritance check direction
+
+### Removed
+- Unused `System.Collections` and `System.Collections.Generic` usings in `IBehaviour.cs`
+
+### Improved
+- `README.md` expanded with installation instructions, content overview, and optional dependencies
+
 ## [1.0.1] - 2026-03-02
 
 ### Changed
