@@ -22,24 +22,24 @@ namespace AnkleBreaker.Core.Editor
             while (!listProc.IsCompleted)
                 yield return null;
 
-#if !AB_UTILS
+#if !AB_UTILS_INSPECTOR
             yield return null;
             AddRequest sysProc = null;
 
-            if (!SessionState.GetBool("AB_UTILS-Install", false))
+            if (!SessionState.GetBool("AB_UTILS_INSPECTOR-Install", false))
             {
-                SessionState.SetBool("AB_UTILS-Install", true);
-                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git#Release");
+                SessionState.SetBool("AB_UTILS_INSPECTOR-Install", true);
+                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/utils-inspector.git#Release");
             }
             else
             {
-                Debug.Log("AnkleBreaker.Utils checking dependency is already in progress...");
+                Debug.Log("AnkleBreaker.Utils.Inspector checking dependency is already in progress...");
                 yield break;
             }
 
             if (sysProc.Status == StatusCode.InProgress)
             {
-                Debug.Log("Installing AnkleBreaker.Utils ...");
+                Debug.Log("Installing AnkleBreaker.Utils.Inspector ...");
                 while (sysProc.Status == StatusCode.InProgress)
                 {
                     yield return null;
@@ -47,20 +47,20 @@ namespace AnkleBreaker.Core.Editor
             }
 
             if (sysProc.Status == StatusCode.Failure)
-                Debug.LogError("PackageManager's AnkleBreaker.Utils install failed, Error Message: " + sysProc.Error.message);
+                Debug.LogError("PackageManager's AnkleBreaker.Utils.Inspector install failed, Error Message: " + sysProc.Error.message);
             else if (sysProc.Status == StatusCode.Success)
-                Debug.Log("AnkleBreaker.Utils " + sysProc.Result.version + " installation complete");
+                Debug.Log("AnkleBreaker.Utils.Inspector " + sysProc.Result.version + " installation complete");
 
-            SessionState.SetBool("AB_UTILS-Install", false);
+            SessionState.SetBool("AB_UTILS_INSPECTOR-Install", false);
 #endif
         }
 
         [MenuItem("Help/AnkleBreaker/Core/Update All Requirements (Package Manager)", priority = 0)]
         public static void InstallRequirements()
         {
-            if (!SessionState.GetBool("AB_UTILS-Install", false))
+            if (!SessionState.GetBool("AB_UTILS_INSPECTOR-Install", false))
             {
-                StartCoroutine(InstallAnkleBreakerUtils());
+                StartCoroutine(InstallAnkleBreakerUtilsInspector());
             }
         }
 
@@ -76,25 +76,25 @@ namespace AnkleBreaker.Core.Editor
             //Application.OpenURL("https://discord.gg/ANKLEBREAKERASSETSUPPORT");
         }
 
-        private static IEnumerator InstallAnkleBreakerUtils()
+        private static IEnumerator InstallAnkleBreakerUtilsInspector()
         {
             yield return null;
             AddRequest sysProc = null;
 
-            if (!SessionState.GetBool("AB_UTILS-Install", false))
+            if (!SessionState.GetBool("AB_UTILS_INSPECTOR-Install", false))
             {
-                SessionState.SetBool("AB_UTILS-Install", true);
-                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git#Release");
+                SessionState.SetBool("AB_UTILS_INSPECTOR-Install", true);
+                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/utils-inspector.git#Release");
             }
             else
             {
-                Debug.Log("AnkleBreaker.Utils checking dependency is already in progress...");
+                Debug.Log("AnkleBreaker.Utils.Inspector checking dependency is already in progress...");
                 yield break;
             }
 
             if (sysProc.Status == StatusCode.InProgress)
             {
-                Debug.Log("Installing AnkleBreaker.Utils ...");
+                Debug.Log("Installing AnkleBreaker.Utils.Inspector ...");
                 while (sysProc.Status == StatusCode.InProgress)
                 {
                     yield return null;
@@ -102,11 +102,11 @@ namespace AnkleBreaker.Core.Editor
             }
 
             if (sysProc.Status == StatusCode.Failure)
-                Debug.LogError("PackageManager's AnkleBreaker.Utils install failed, Error Message: " + sysProc.Error.message);
+                Debug.LogError("PackageManager's AnkleBreaker.Utils.Inspector install failed, Error Message: " + sysProc.Error.message);
             else if (sysProc.Status == StatusCode.Success)
-                Debug.Log("AnkleBreaker.Utils " + sysProc.Result.version + " installation complete");
+                Debug.Log("AnkleBreaker.Utils.Inspector " + sysProc.Result.version + " installation complete");
 
-            SessionState.SetBool("AB_UTILS-Install", false);
+            SessionState.SetBool("AB_UTILS_INSPECTOR-Install", false);
         }
 
         private static List<IEnumerator> coroutines;

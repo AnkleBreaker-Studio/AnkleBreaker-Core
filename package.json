@@ -1,6 +1,6 @@
 {
   "name": "com.anklebreaker-studio.core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "AnkleBreaker-studio Core",
   "description": "The core scripts of the AnkleBreaker team, without any dependencies.",
   "unity": "2022.3",

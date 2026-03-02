@@ -1,6 +1,6 @@
 using UnityEngine;
 using AnkleBreaker.Core.MasterInterfaces;
-#if AB_UTILS
+#if AB_UTILS_INSPECTOR
 using AnkleBreaker.Utils.Inspector;
 #endif
 
@@ -9,7 +9,7 @@ namespace AnkleBreaker.Core.MasterClasses
     public abstract class AnkleBreakerMonoBehaviour : MonoBehaviour, IIsReady
     {
         #region Properties
-#if AB_UTILS
+#if AB_UTILS_INSPECTOR
         [field: HideInNormalInspector]
 #endif
         [field: SerializeField, Tooltip("Set to true once OnStartClient/Server is over")]
