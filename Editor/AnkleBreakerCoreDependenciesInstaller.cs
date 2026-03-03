@@ -9,59 +9,31 @@ namespace AnkleBreaker.Core.Editor
 {
     public class AnkleBreakerCoreDependenciesInstaller
     {
+        private const string UTILS_INSPECTOR_URL = "https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils-Inspector.git#Release";
+        private const string UTILS_INSPECTOR_DISPLAY_NAME = "AnkleBreaker.Utils.Inspector";
+        public const string DISMISSED_KEY = "AB_UtilsInspector_Dismissed";
+
         [InitializeOnLoadMethod]
         public static void CheckAllDependencies()
         {
-            StartCoroutine(CheckAndInstallAllDependenciesCoroutine());
-        }
-
-        private static IEnumerator CheckAndInstallAllDependenciesCoroutine()
-        {
-            var listProc = Client.List();
-
-            while (!listProc.IsCompleted)
-                yield return null;
-
-#if !AB_UTILS
-            yield return null;
-            AddRequest sysProc = null;
-
-            if (!SessionState.GetBool("AB_UTILS-Install", false))
+#if !AB_UTILS_INSPECTOR
+            if (!SessionState.GetBool(DISMISSED_KEY, false))
             {
-                SessionState.SetBool("AB_UTILS-Install", true);
-                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git#Release");
-            }
-            else
-            {
-                Debug.Log("AnkleBreaker.Utils checking dependency is already in progress...");
-                yield break;
-            }
-
-            if (sysProc.Status == StatusCode.InProgress)
-            {
-                Debug.Log("Installing AnkleBreaker.Utils ...");
-                while (sysProc.Status == StatusCode.InProgress)
+                EditorApplication.delayCall += () =>
                 {
-                    yield return null;
-                }
+                    AnkleBreakerDependencyWindow.ShowWindow();
+                };
             }
-
-            if (sysProc.Status == StatusCode.Failure)
-                Debug.LogError("PackageManager's AnkleBreaker.Utils install failed, Error Message: " + sysProc.Error.message);
-            else if (sysProc.Status == StatusCode.Success)
-                Debug.Log("AnkleBreaker.Utils " + sysProc.Result.version + " installation complete");
-
-            SessionState.SetBool("AB_UTILS-Install", false);
 #endif
         }
 
-        [MenuItem("Help/AnkleBreaker/Core/Update All Requirements (Package Manager)", priority = 0)]
-        public static void InstallRequirements()
+        [MenuItem("Help/AnkleBreaker/Core/Install Utils Inspector Package", priority = 0)]
+        public static void InstallUtilsInspector()
         {
-            if (!SessionState.GetBool("AB_UTILS-Install", false))
-            {
-                StartCoroutine(InstallAnkleBreakerUtils());
-            }
+            StartCoroutine(InstallPackageAsync(
+                UTILS_INSPECTOR_URL,
+                "AB_UTILS_INSPECTOR-Install",
+                UTILS_INSPECTOR_DISPLAY_NAME));
         }
 
         [MenuItem("Help/AnkleBreaker/Core/Documentation", priority = 3)]
@@ -76,73 +48,182 @@ namespace AnkleBreaker.Core.Editor
             //Application.OpenURL("https://discord.gg/ANKLEBREAKERASSETSUPPORT");
         }
 
-        private static IEnumerator InstallAnkleBreakerUtils()
+        public static IEnumerator InstallPackageAsync(string packageUrl, string sessionKey, string displayName)
         {
             yield return null;
-            AddRequest sysProc = null;
 
-            if (!SessionState.GetBool("AB_UTILS-Install", false))
+            if (SessionState.GetBool(sessionKey, false))
             {
-                SessionState.SetBool("AB_UTILS-Install", true);
-                sysProc = Client.Add("https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils.git#Release");
-            }
-            else
-            {
-                Debug.Log("AnkleBreaker.Utils checking dependency is already in progress...");
+                Debug.Log($"{displayName} install is already in progress...");
                 yield break;
             }
 
-            if (sysProc.Status == StatusCode.InProgress)
-            {
-                Debug.Log("Installing AnkleBreaker.Utils ...");
-                while (sysProc.Status == StatusCode.InProgress)
-                {
-                    yield return null;
-                }
-            }
+            SessionState.SetBool(sessionKey, true);
+            AddRequest addRequest = Client.Add(packageUrl);
 
-            if (sysProc.Status == StatusCode.Failure)
-                Debug.LogError("PackageManager's AnkleBreaker.Utils install failed, Error Message: " + sysProc.Error.message);
-            else if (sysProc.Status == StatusCode.Success)
-                Debug.Log("AnkleBreaker.Utils " + sysProc.Result.version + " installation complete");
+            Debug.Log($"Installing {displayName} ...");
+            while (addRequest.Status == StatusCode.InProgress)
+                yield return null;
 
-            SessionState.SetBool("AB_UTILS-Install", false);
+            if (addRequest.Status == StatusCode.Failure)
+                Debug.LogError($"PackageManager's {displayName} install failed, Error Message: {addRequest.Error.message}");
+            else if (addRequest.Status == StatusCode.Success)
+                Debug.Log($"{displayName} {addRequest.Result.version} installation complete");
+
+            SessionState.SetBool(sessionKey, false);
         }
 
-        private static List<IEnumerator> coroutines;
+        #region Editor Coroutine System
+        private static List<IEnumerator> _coroutines;
 
-        private static void StartCoroutine(IEnumerator handle)
+        public static void StartCoroutine(IEnumerator handle)
         {
-            if (coroutines == null)
+            if (_coroutines == null)
             {
-                EditorApplication.update -= EditorUpdate;
+                _coroutines = new List<IEnumerator>();
                 EditorApplication.update += EditorUpdate;
-                coroutines = new List<IEnumerator>();
             }
 
-            coroutines.Add(handle);
+            _coroutines.Add(handle);
         }
 
         private static void EditorUpdate()
         {
-            List<IEnumerator> done = new List<IEnumerator>();
-
-            if (coroutines != null)
+            for (int i = _coroutines.Count - 1; i >= 0; i--)
             {
-                foreach (var e in coroutines)
+                try
                 {
-                    if (!e.MoveNext())
-                        done.Add(e);
-                    else
-                    {
-                        if (e.Current != null)
-                            Debug.Log(e.Current.ToString());
-                    }
+                    if (!_coroutines[i].MoveNext())
+                        _coroutines.RemoveAt(i);
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogException(ex);
+                    _coroutines.RemoveAt(i);
                 }
             }
 
-            foreach (var d in done)
-                coroutines.Remove(d);
+            if (_coroutines.Count == 0)
+            {
+                EditorApplication.update -= EditorUpdate;
+                _coroutines = null;
+            }
+        }
+        #endregion
+    }
+
+    public class AnkleBreakerDependencyWindow : EditorWindow
+    {
+        private const string UTILS_INSPECTOR_URL = "https://github.com/AnkleBreaker-Studio/AnkleBreaker-Utils-Inspector.git#Release";
+        private const string UTILS_INSPECTOR_DISPLAY_NAME = "AnkleBreaker.Utils.Inspector";
+
+        private static GUIStyle _titleStyle;
+        private static GUIStyle _messageStyle;
+        private static GUIStyle _warningStyle;
+
+        public static void ShowWindow()
+        {
+            var window = GetWindow<AnkleBreakerDependencyWindow>(true, "AnkleBreaker Core - Missing Dependency", true);
+            window.minSize = new Vector2(500, 280);
+            window.maxSize = new Vector2(500, 280);
+            window.ShowUtility();
+        }
+
+        private void OnGUI()
+        {
+            InitStyles();
+
+            EditorGUILayout.Space(15);
+
+            EditorGUILayout.LabelField("Missing Recommended Package", _titleStyle);
+
+            EditorGUILayout.Space(10);
+
+            EditorGUILayout.LabelField(
+                "AnkleBreaker Core strongly recommends installing the Utils Inspector package.\n\n" +
+                "Without it, some features will be disabled:\n" +
+                "  - Custom inspector attributes (HideInNormalInspector, Button, etc.)\n" +
+                "  - Enhanced editor tooling for AnkleBreaker components",
+                _messageStyle);
+
+            EditorGUILayout.Space(10);
+
+            EditorGUILayout.LabelField(
+                "It is highly recommended to install this package for the best experience.",
+                _warningStyle);
+
+            EditorGUILayout.Space(15);
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            if (GUILayout.Button("Install Utils Inspector", GUILayout.Width(200), GUILayout.Height(35)))
+            {
+                AnkleBreakerCoreDependenciesInstaller.StartCoroutine(
+                    AnkleBreakerCoreDependenciesInstaller.InstallPackageAsync(
+                        UTILS_INSPECTOR_URL,
+                        "AB_UTILS_INSPECTOR-Install",
+                        UTILS_INSPECTOR_DISPLAY_NAME));
+                Close();
+            }
+
+            GUILayout.Space(10);
+
+            if (GUILayout.Button("Remind Me Later", GUILayout.Width(140), GUILayout.Height(35)))
+            {
+                Close();
+            }
+
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space(5);
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            if (GUILayout.Button("Don't Show Again (this session)", GUILayout.Width(250), GUILayout.Height(22)))
+            {
+                SessionState.SetBool(AnkleBreakerCoreDependenciesInstaller.DISMISSED_KEY, true);
+                Close();
+            }
+
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space(10);
+        }
+
+        private static void InitStyles()
+        {
+            if (_titleStyle == null)
+            {
+                _titleStyle = new GUIStyle(EditorStyles.boldLabel)
+                {
+                    fontSize = 16,
+                    alignment = TextAnchor.MiddleCenter
+                };
+            }
+
+            if (_messageStyle == null)
+            {
+                _messageStyle = new GUIStyle(EditorStyles.wordWrappedLabel)
+                {
+                    fontSize = 12,
+                    padding = new RectOffset(15, 15, 0, 0)
+                };
+            }
+
+            if (_warningStyle == null)
+            {
+                _warningStyle = new GUIStyle(EditorStyles.wordWrappedLabel)
+                {
+                    fontSize = 12,
+                    fontStyle = FontStyle.Bold,
+                    alignment = TextAnchor.MiddleCenter
+                };
+                _warningStyle.normal.textColor = new Color(1f, 0.6f, 0f);
+            }
         }
     }
 }

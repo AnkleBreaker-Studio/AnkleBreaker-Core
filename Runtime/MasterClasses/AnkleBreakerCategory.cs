@@ -12,7 +12,8 @@ namespace AnkleBreaker.Core.MasterClasses
     [Serializable]
     public abstract class AnkleBreakerCategory : BaseScriptableObject
     {
-        public Sprite CategoryIcon;
+        [field: SerializeField]
+        public Sprite CategoryIcon { get; private set; }
     }
 
     public static class AnkleBreakerCategory_Extensions
@@ -27,6 +28,8 @@ namespace AnkleBreaker.Core.MasterClasses
                 foreach (AnkleBreakerCategory categoryToCheck in categoriesToCheck)
                     if (srcCategories.ImplementsCategory(categoryToCheck, checkSubclass) == false)
                         return false;
+
+                return true;
             }
 
             else
@@ -62,6 +65,11 @@ namespace AnkleBreaker.Core.MasterClasses
             return false;
         }
 
+        /// <summary>
+        /// Checks if srcCategory matches typeToCheck.
+        /// When checkSubclass is true, also returns true if typeToCheck inherits from srcCategory's type.
+        /// i.e. "does the checked type derive from the source?" — not the other way around.
+        /// </summary>
         public static bool ImplementsType(this AnkleBreakerCategory srcCategory, Type typeToCheck, bool checkSubclass = true)
         {
             Type srcCategoryType = srcCategory.GetType();

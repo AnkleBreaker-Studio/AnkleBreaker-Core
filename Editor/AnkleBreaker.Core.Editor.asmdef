@@ -1,6 +1,6 @@
 {
     "name": "AnkleBreaker.Core.Editor",
-    "rootNamespace": "",
+    "rootNamespace": "AnkleBreaker.Core.Editor",
     "references": [],
     "includePlatforms": [
         "Editor"
@@ -15,7 +15,12 @@
         {
             "name": "com.anklebreaker-studio.utils",
             "expression": "",
-            "define": "AB_UTILS"
+            "define": "AB_UTILS_INSPECTOR"
+        },
+        {
+            "name": "com.anklebreaker-studio.utils.inspector",
+            "expression": "",
+            "define": "AB_UTILS_INSPECTOR"
         }
     ],
     "noEngineReferences": false

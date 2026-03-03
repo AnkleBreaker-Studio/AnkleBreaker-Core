@@ -1,58 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
+using AnkleBreaker.Core.MasterClasses;
 
 public class #SCRIPTNAME# : AnkleBreakerMonoBehaviour
 {
-    #region PublicAttributes
-    public List<#SCRIPTNAME#Controller> #SCRIPTNAME#ControllerList = new List<#SCRIPTNAME#Controller>();
+    #region Serialized Fields
     #NOTRIM#
     #endregion
-    #region PrivateAttributes
-    #NOTRIM#
-    #endregion
-    
-    public override void EventHandlerRegister()
-    {
-        #NOTRIM#
-    }
-    public override void EventHandlerUnRegister()
-    {
-        #NOTRIM#
-    }
-    
-   public override void Start()
-   {
-       base.Start();
-   }
-}
 
-public class #SCRIPTNAME#Controller : RltyNetworkBehaviour
-{
-    #region PublicAttributes
+    #region Private Fields
     #NOTRIM#
     #endregion
-    #region PrivateAttributes
-    #NOTRIM#
-    #endregion
-    
-    public override void EventHandlerRegister()
+
+    protected override void EventHandlerRegister()
     {
         #NOTRIM#
     }
-    public override void EventHandlerUnRegister()
+
+    protected override void EventHandlerUnRegister()
     {
         #NOTRIM#
     }
-    
+
     public override void Start()
     {
-            base.Start();
+        base.Start();
     }
 }
 
 public static class #SCRIPTNAME#HandlerData
 {
-    public static UnityAction OnEventRequest;
+    public static event Action OnEventRequest;
     public static void EventRequest() => OnEventRequest?.Invoke();
 }

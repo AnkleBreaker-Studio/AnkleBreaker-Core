@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using AnkleBreaker.Core.MasterClasses;
-using AnkleBreaker.Core.MasterStructs;
+using AnkleBreaker.Core.Structs;
 
 namespace AnkleBreaker.Core.MasterInterfaces
 {
