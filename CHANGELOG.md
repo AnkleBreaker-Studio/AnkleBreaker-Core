@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.0.5] - 2026-03-06
+
+### Fixed
+- **Breaking change reverted**: renamed `Structs` folder back to `MasterStructs` and restored namespace `AnkleBreaker.Core.MasterStructs` (was `AnkleBreaker.Core.Structs` in 1.0.2–1.0.4) to maintain backward compatibility with existing projects
+
 ## [1.0.2] - 2026-03-02
 
 ### Fixed

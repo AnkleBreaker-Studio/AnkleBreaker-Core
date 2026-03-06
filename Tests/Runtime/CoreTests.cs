@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using AnkleBreaker.Core.MasterDelegates;
 using AnkleBreaker.Core.MasterInterfaces;
-using AnkleBreaker.Core.Structs;
+using AnkleBreaker.Core.MasterStructs;
 using AnkleBreaker.Core.MasterClasses;
 using UnityEngine;
 

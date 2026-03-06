@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace AnkleBreaker.Core.Structs
+namespace AnkleBreaker.Core.MasterStructs
 {
     [Serializable]
     public struct AssetIdentityStruct
