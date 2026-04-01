@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.0] - 2026-04-01
+
+### Added
+- **ABDefineAttribute**: Assembly-level attribute `[assembly: ABDefine("AB_XXX", typeName, assembly)]` for declarative plugin detection
+- **ABDefineManager**: `[InitializeOnLoad]` scanner that collects all `[ABDefine]` attributes across loaded assemblies, detects plugin presence via `Type.GetType`, and sets/removes scripting define symbols automatically
+- Conflict detection: `Debug.LogWarning` when two packages declare the same define with different canonical types
+- Convention documentation for `AB_` prefixed defines (AB_WWISE, AB_FMOD, AB_I2_LOCALIZE)
+- Editor tests for ABDefineAttribute (5 tests) and ABDefineManager (3 tests)
+
 ## [1.0.5] - 2026-03-06
 
 ### Fixed
