@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using AnkleBreaker.Core.MasterClasses;
 
-/// <summary>
-/// Controller: driven by its Manager (direct intra-feature reference). It never subscribes
-/// to the event bus — push intent via the feature HandlerData Request helpers.
-/// </summary>
+/// <summary>Controller: driven by its Manager (direct intra-feature reference), never
+/// subscribes to the bus — push intent via the feature HandlerData Request helpers.</summary>
 public class #SCRIPTNAME# : AnkleBreakerController
 {
     #region Serialized Fields

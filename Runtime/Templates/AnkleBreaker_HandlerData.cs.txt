@@ -1,10 +1,8 @@
 using System;
 using AnkleBreaker.Core.MasterDelegates;
 
-/// <summary>
-/// Static event bus for the feature. Pure contract: events + invoke helpers only —
-/// no fields, no state, no logic beyond ?.Invoke().
-/// </summary>
+/// <summary>Static event bus for the feature. Pure contract: events + invoke helpers only —
+/// no fields, no state, no logic beyond ?.Invoke().</summary>
 public static class #SCRIPTNAME#
 {
     // === Notifications ===
