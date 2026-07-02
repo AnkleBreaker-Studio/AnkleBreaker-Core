@@ -30,11 +30,7 @@ public class #SCRIPTNAME# : AnkleBreakerMonoBehaviour
 
     protected override void EventHandlerUnRegister()
     {
-        //if (IsOwner)
-        #NOTRIM#
-        //if (IsClient)
-        #NOTRIM#
-        //if (IsServer)
+        // NEVER conditional — one -= for every possible +=
         #NOTRIM#
     }
 

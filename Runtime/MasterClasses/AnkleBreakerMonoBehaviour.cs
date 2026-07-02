@@ -12,7 +12,7 @@ namespace AnkleBreaker.Core.MasterClasses
 #if AB_UTILS_INSPECTOR
         [field: HideInNormalInspector]
 #endif
-        [field: SerializeField, Tooltip("Set to true once OnStartClient/Server is over")]
+        [field: SerializeField, Tooltip("Set to true once Start has run (events registered)")]
         public bool IsLocallyReady { get; private set; }
         #endregion
 
