@@ -10,6 +10,9 @@
 ### Changed
 - **AnkleBreaker_MonoBehaviour template**: no longer embeds a HandlerData class in the same file — a HandlerData is one file per feature, created from the dedicated template
 
+### Removed
+- **AnkleBreaker_NetworkBehaviour template**: moved to AnkleBreaker-FishNet-Core, where it derives AnkleBreakerNetworkBehaviour for real (it was a placeholder here, historically referencing a pre-FishNet base class); Core no longer carries any network notion
+
 ### Fixed
 - **AnkleBreaker_NetworkBehaviour template**: remove suggested conditional guards from EventHandlerUnRegister (UnRegister is always unconditional, one -= per possible +=)
 - **AnkleBreakerMonoBehaviour**: IsLocallyReady tooltip referenced OnStartClient/Server; this base flips it at the end of Start
