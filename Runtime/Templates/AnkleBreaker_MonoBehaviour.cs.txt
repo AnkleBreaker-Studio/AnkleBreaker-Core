@@ -29,9 +29,3 @@ public class #SCRIPTNAME# : AnkleBreakerMonoBehaviour
         base.Start();
     }
 }
-
-public static class #SCRIPTNAME#HandlerData
-{
-    public static event Action OnEventRequest;
-    public static void EventRequest() => OnEventRequest?.Invoke();
-}

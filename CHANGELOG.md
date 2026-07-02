@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0] - 2026-07-02
+
+### Added
+- **AnkleBreaker_HandlerData template**: dedicated script template for HandlerData static event buses (canonical Notifications / Commands / Queries sections, one XML summary per event, pure contract rule)
+
+### Changed
+- **AnkleBreaker_MonoBehaviour template**: no longer embeds a HandlerData class in the same file — a HandlerData is one file per feature, created from the dedicated template
+
+### Fixed
+- **AnkleBreaker_NetworkBehaviour template**: remove suggested conditional guards from EventHandlerUnRegister (UnRegister is always unconditional, one -= per possible +=)
+- **AnkleBreakerMonoBehaviour**: IsLocallyReady tooltip referenced OnStartClient/Server; this base flips it at the end of Start
+
 ## [1.1.0] - 2026-04-01
 
 ### Added
