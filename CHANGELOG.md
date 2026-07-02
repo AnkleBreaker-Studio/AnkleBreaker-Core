@@ -3,7 +3,7 @@
 ## [1.2.0] - 2026-07-02
 
 ### Added
-- **AnkleBreakerController**: base class for Controllers — EventHandlerRegister/UnRegister are sealed empty, so a Controller cannot subscribe to the event bus (compile-enforced); it is driven by its Manager and pushes intent via HandlerData Request helpers
+- **AnkleBreakerController**: base class for Controllers — derives plain MonoBehaviour and carries none of the bus registration/readiness machinery (no EventHandlerRegister, no IIsReady): a Controller has nothing to subscribe with; it is driven by its Manager and pushes intent via HandlerData Request helpers
 - **AnkleBreaker_Controller template**: script template for Controllers (no event registration blocks)
 - **AnkleBreaker_HandlerData template**: dedicated script template for HandlerData static event buses (canonical Notifications / Commands / Queries sections, one XML summary per event, pure contract rule)
 
